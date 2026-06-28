@@ -1,0 +1,2011 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Roshan G — Pharmaceutical Sciences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ───────────── tokens ───────────── */
+  :root {
+    --ink:        #000000;
+    --ink-2:      #080808;
+    --ink-3:      #101010;
+    --line:       #1e1e1e;
+    --bone:       #f0f0f0;
+    --bone-dim:   #a0a0a0;
+    --bone-soft:  #555555;
+    --accent:     oklch(0.88 0.0 0);
+    --accent-dim: oklch(0.88 0.0 0 / 0.14);
+    --warn:       oklch(0.84 0.13 70);
+    --serif: "Instrument Serif", "Times New Roman", serif;
+    --sans:  "Geist", -apple-system, system-ui, sans-serif;
+    --mono:  "JetBrains Mono", ui-monospace, monospace;
+
+    --maxw: 1280px;
+    --gut: clamp(20px, 4vw, 56px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--sans);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  @media (pointer: coarse) { body { cursor: auto; } #cursor, #cursor-ring { display: none !important; } }
+
+  ::selection { background: var(--accent); color: var(--ink); }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+
+  /* film grain overlay */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ───────────── custom cursor ───────────── */
+  #cursor, #cursor-ring {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+  #cursor {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    transition: width 0.15s, height 0.15s, background 0.15s;
+  }
+  #cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid var(--bone-dim);
+    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s, background 0.25s;
+  }
+  body.cursor-link #cursor { width: 0; height: 0; }
+  body.cursor-link #cursor-ring { width: 56px; height: 56px; border-color: var(--accent); background: color-mix(in oklch, var(--accent) 12%, transparent); }
+
+  /* ───────────── boot curtain ───────────── */
+  #boot {
+    position: fixed; inset: 0;
+    background: var(--ink);
+    z-index: 9000;
+    display: grid; place-items: center;
+    overflow: hidden;
+  }
+  #boot.gone { pointer-events: none; }
+  .boot-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, color-mix(in oklch, var(--bone) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklch, var(--bone) 6%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(circle at 50% 50%, black 0%, transparent 70%);
+    opacity: 0.5;
+  }
+  .boot-stack {
+    text-align: center;
+    position: relative;
+  }
+  .boot-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    margin-bottom: 28px;
+  }
+  .boot-name {
+    font-family: var(--serif);
+    font-size: clamp(60px, 12vw, 180px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+  }
+  .boot-name span { display: inline-block; opacity: 0; transform: translateY(40px); animation: bootIn 0.8s cubic-bezier(.2,.7,.2,1) forwards; }
+  .boot-name span:nth-child(1) { animation-delay: 0.20s; }
+  .boot-name span:nth-child(2) { animation-delay: 0.30s; }
+  .boot-name span:nth-child(3) { animation-delay: 0.40s; }
+  .boot-name span:nth-child(4) { animation-delay: 0.50s; }
+  .boot-name span:nth-child(5) { animation-delay: 0.62s; }
+  .boot-name span:nth-child(6) { animation-delay: 0.72s; }
+  .boot-name span:nth-child(7) { animation-delay: 0.82s; }
+  @keyframes bootIn { to { opacity: 1; transform: translateY(0); } }
+
+  .boot-bar {
+    margin: 36px auto 0;
+    width: min(420px, 60vw);
+    height: 1px;
+    background: var(--line);
+    overflow: hidden;
+    position: relative;
+  }
+  .boot-bar::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: bootBar 1.6s cubic-bezier(.65,0,.35,1) 0.2s forwards;
+  }
+  @keyframes bootBar { to { transform: scaleX(1); } }
+
+  #boot.gone .boot-stack { animation: bootOutStack 0.6s ease forwards; }
+  #boot.gone { animation: bootOut 0.9s 0.4s cubic-bezier(.7,0,.3,1) forwards; }
+  @keyframes bootOutStack { to { opacity: 0; transform: translateY(-10px); } }
+  @keyframes bootOut { to { transform: translateY(-100%); } }
+
+  /* ───────────── nav ───────────── */
+  nav.top {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 80;
+    padding: 22px var(--gut);
+    display: flex; align-items: center; justify-content: space-between;
+    mix-blend-mode: difference;
+    color: var(--bone);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  nav.top .logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  nav.top .logo .dot {
+    width: 7px; height: 7px; border-radius: 999px;
+    background: var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.6); opacity: 0.5; }
+  }
+  nav.top ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; gap: 28px;
+  }
+  nav.top ul a {
+    position: relative; padding-bottom: 4px;
+  }
+  nav.top ul a::after {
+    content: ""; position: absolute; left: 0; right: 100%; bottom: 0;
+    height: 1px; background: var(--bone);
+    transition: right 0.4s cubic-bezier(.7,0,.3,1);
+  }
+  nav.top ul a:hover::after { right: 0; }
+  nav.top .clock { font-variant-numeric: tabular-nums; }
+
+  /* ───────────── progress dots ───────────── */
+  .dots {
+    position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+    z-index: 70;
+    display: flex; flex-direction: column; gap: 14px;
+    align-items: flex-end;
+  }
+  .dots a {
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+  }
+  .dots a .lbl { opacity: 0; transform: translateX(8px); transition: 0.3s; }
+  .dots a:hover .lbl, .dots a.active .lbl { opacity: 1; transform: translateX(0); color: var(--bone); }
+  .dots a .pip {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--bone-soft);
+    transition: 0.3s;
+  }
+  .dots a.active .pip { background: var(--accent); width: 14px; border-radius: 2px; }
+  @media (max-width: 760px) { .dots { display: none; } }
+
+  /* ───────────── shared ───────────── */
+  section {
+    position: relative;
+    padding: clamp(80px, 12vw, 160px) var(--gut);
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ""; width: 28px; height: 1px;
+    background: var(--accent);
+  }
+  .h-display {
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.02em;
+    font-size: clamp(48px, 8vw, 128px);
+    margin: 0;
+  }
+  .h-section {
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    font-size: clamp(40px, 6vw, 88px);
+    margin: 16px 0 0;
+  }
+  .h-section em { font-style: italic; color: var(--accent); }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: 0.08s; }
+  .reveal.d2 { transition-delay: 0.16s; }
+  .reveal.d3 { transition-delay: 0.24s; }
+  .reveal.d4 { transition-delay: 0.32s; }
+  .reveal.d5 { transition-delay: 0.40s; }
+
+  /* ── Medicine / Vaccine photo background layer ── */
+  #hero-bg-img {
+    position: absolute; inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(135deg, rgba(0,0,0,0.88) 0%, rgba(0,4,12,0.82) 50%, rgba(0,0,0,0.90) 100%),
+      url('https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1600&q=80&fm=jpg&fit=crop') center/cover no-repeat;
+    filter: saturate(0.35) brightness(0.42);
+  }
+
+  /* ── Decorative medicine & vaccine SVG watermarks ── */
+  #hero-deco {
+    position: absolute; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  #hero-deco svg {
+    position: absolute;
+    opacity: 0.045;
+    color: var(--bone);
+  }
+  #hero-deco .deco-pill {
+    right: 6%; top: 8%;
+    width: clamp(180px, 22vw, 340px);
+    animation: decoFloat 9s ease-in-out infinite;
+  }
+  #hero-deco .deco-syringe {
+    left: 2%; bottom: 12%;
+    width: clamp(140px, 18vw, 280px);
+    animation: decoFloat 11s ease-in-out infinite reverse;
+  }
+  #hero-deco .deco-capsule {
+    right: 28%; bottom: 6%;
+    width: clamp(100px, 12vw, 200px);
+    animation: decoFloat 13s ease-in-out 2s infinite;
+  }
+  @keyframes decoFloat {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    33%  { transform: translateY(-12px) rotate(2deg); }
+    66%  { transform: translateY(8px) rotate(-1.5deg); }
+  }
+  #hero {
+    min-height: 100vh;
+    padding-top: 0;
+    padding-bottom: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    overflow: hidden;
+    max-width: none;
+  }
+  /* ───────────── HERO ───────────── */
+  #hero canvas#mol {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+  }
+  #hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 18% 50%, rgba(80,120,200,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 84% 55%, rgba(180,200,255,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 52% 85%, rgba(120,100,200,0.04) 0%, transparent 45%),
+      linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 40%, rgba(0,0,0,0.75) 80%, var(--ink) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  /* subtle scanline grid over hero */
+  #hero .bio-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .hero-stack {
+    position: relative; z-index: 3;
+    align-self: end;
+    padding: 0 var(--gut) clamp(40px, 8vw, 80px);
+    max-width: var(--maxw);
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 36px;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 8px; }
+  .hero-meta .live::before {
+    content: ""; width: 6px; height: 6px; border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    animation: pulseDot 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 50%, transparent); }
+    100% { box-shadow: 0 0 0 8px transparent; }
+  }
+  .hero-name-big {
+    font-family: var(--mono);
+    font-size: clamp(28px, 4.5vw, 68px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin: 0 0 18px 0;
+    line-height: 1;
+  }
+  h1#hero-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(36px, 6.5vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin: 0;
+    max-width: 20ch;
+  }
+  h1#hero-title .ital { font-style: italic; color: var(--bone); }
+  h1#hero-title .accent { color: var(--accent); font-style: italic; }
+  .hero-sub {
+    margin-top: clamp(28px, 4vw, 48px);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(24px, 4vw, 80px);
+    align-items: end;
+  }
+  .hero-sub .lede {
+    font-size: clamp(15px, 1.3vw, 18px);
+    line-height: 1.55;
+    color: var(--bone-dim);
+    max-width: 42ch;
+    font-weight: 300;
+  }
+  .hero-sub .lede strong { color: var(--bone); font-weight: 500; }
+  .hero-cta {
+    display: flex; gap: 14px; align-items: center;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 22px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--bone);
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: 0.3s;
+    background: transparent;
+  }
+  .btn .arr { display: inline-block; transition: transform 0.3s; }
+  .btn:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+  .btn:hover .arr { transform: translateX(4px); }
+  .btn.primary { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .btn.primary:hover { background: var(--bone); border-color: var(--bone); }
+
+  .scroll-hint {
+    position: absolute;
+    left: var(--gut);
+    bottom: 28px;
+    z-index: 4;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    display: flex; align-items: center; gap: 10px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .scroll-hint .line {
+    width: 1px; height: 40px; background: var(--bone-soft); position: relative; overflow: hidden;
+  }
+  .scroll-hint .line::after {
+    content: ""; position: absolute; inset: 0; background: var(--accent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: translateY(-100%); }
+    50% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+  }
+
+  /* ───────────── ticker (between sections) ───────────── */
+  .ticker {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    background: var(--ink);
+    position: relative;
+    z-index: 2;
+  }
+  .ticker-track {
+    display: flex; gap: 56px;
+    padding: 22px 0;
+    width: max-content;
+    animation: ticker 110s linear infinite;
+    font-family: var(--serif);
+    font-size: clamp(28px, 4.5vw, 64px);
+    line-height: 1;
+    color: var(--bone);
+    white-space: nowrap;
+  }
+  .ticker-track span { font-style: italic; color: var(--bone-soft); }
+  .ticker-track em { font-style: normal; color: var(--bone); }
+  .ticker-track .dot {
+    width: 12px; height: 12px; border-radius: 999px;
+    background: var(--accent);
+    align-self: center;
+    flex-shrink: 0;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ───────────── ABOUT ───────────── */
+  #about .grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(40px, 8vw, 120px);
+    margin-top: clamp(60px, 8vw, 100px);
+    align-items: start;
+  }
+  @media (max-width: 880px) { #about .grid { grid-template-columns: 1fr; } }
+  #about p {
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.5;
+    color: var(--bone);
+    font-weight: 300;
+  }
+  #about p + p { margin-top: 1em; }
+  #about .stat-col { display: grid; gap: 32px; align-content: start; }
+  .stat {
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+  }
+  .stat .lbl {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+  }
+  .stat .val {
+    font-family: var(--serif);
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    color: var(--bone);
+  }
+  .stat .val .unit { font-size: 0.4em; color: var(--bone-soft); margin-left: 6px; }
+
+  /* ── Image-2 style profile info card ── */
+  .profile-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: linear-gradient(160deg, var(--ink-2), var(--ink-3));
+    overflow: hidden;
+    position: relative;
+  }
+  .profile-card-rows {
+    display: grid;
+  }
+  .profile-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+  .profile-card-row:last-child { border-bottom: none; }
+  .profile-card-row .pk {
+    color: var(--bone-soft);
+    text-transform: lowercase;
+  }
+  .profile-card-row .pv {
+    color: var(--accent);
+    text-align: right;
+    max-width: 55%;
+  }
+  .profile-card-monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 28px 28px;
+    font-family: var(--mono);
+    font-size: clamp(56px, 8vw, 100px);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklch, var(--accent) 55%, transparent);
+    line-height: 1;
+    user-select: none;
+  }
+  @media (max-width: 880px) { .profile-card { margin-top: 40px; } }
+
+  /* ───────────── EDUCATION ───────────── */
+  #education {
+    border-top: 1px solid var(--line);
+  }
+  .timeline {
+    margin-top: clamp(60px, 8vw, 100px);
+    display: grid;
+    gap: 0;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 160px 1fr auto;
+    gap: clamp(20px, 4vw, 60px);
+    align-items: start;
+    padding: clamp(32px, 4vw, 48px) 0;
+    border-top: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .tl-row:last-child { border-bottom: 1px solid var(--line); }
+  .tl-row::before {
+    content: "";
+    position: absolute; left: 0; top: 0; height: 100%;
+    width: 0;
+    background: color-mix(in oklch, var(--accent) 6%, transparent);
+    transition: width 0.6s cubic-bezier(.2,.7,.2,1);
+    z-index: 0;
+  }
+  .tl-row:hover::before { width: 100%; }
+  .tl-row > * { position: relative; z-index: 1; }
+
+  .tl-when {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    padding-top: 8px;
+  }
+  .tl-body h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .tl-body .org {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+  }
+  .tl-body p {
+    margin: 14px 0 0;
+    color: var(--bone-dim);
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 60ch;
+  }
+  .tl-grade {
+    text-align: right;
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1;
+    color: var(--bone);
+    padding-top: 4px;
+    font-feature-settings: "tnum" 1;
+  }
+  .tl-grade .pct { color: var(--accent); font-style: italic; }
+  .tl-grade .sub { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-soft); margin-top: 8px; font-style: normal; }
+
+  @media (max-width: 760px) {
+    .tl-row { grid-template-columns: 1fr; gap: 16px; }
+    .tl-grade { text-align: left; }
+  }
+
+  /* ───────────── CERTIFICATIONS ───────────── */
+  #certs { border-top: 1px solid var(--line); }
+  .cert-grid {
+    margin-top: clamp(60px, 8vw, 100px);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+  }
+  .cert-card {
+    grid-column: span 12;
+    border: 1px solid var(--line);
+    padding: clamp(28px, 4vw, 48px);
+    background: linear-gradient(160deg, var(--ink-2), var(--ink));
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    transform-style: preserve-3d;
+    transition: border-color 0.4s, transform 0.4s;
+  }
+  .cert-card:hover { border-color: color-mix(in oklch, var(--accent) 50%, var(--line)); }
+  .cert-card::after {
+    content: "";
+    position: absolute; right: -40%; bottom: -40%;
+    width: 80%; height: 80%;
+    background: radial-gradient(circle, var(--accent-dim), transparent 70%);
+    pointer-events: none;
+    transition: 0.6s;
+  }
+  .cert-card:hover::after { right: -20%; bottom: -20%; }
+  .cert-card .top {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    margin-bottom: 32px;
+  }
+  .cert-card .top .badge {
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .cert-card h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(34px, 4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0;
+    max-width: 18ch;
+  }
+  .cert-card h3 em { color: var(--accent); }
+  .cert-card .meta {
+    margin-top: 32px;
+    display: flex; flex-wrap: wrap; gap: 12px 32px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ───────────── SKILLS ───────────── */
+  #skills { border-top: 1px solid var(--line); }
+  .skill-rows {
+    margin-top: clamp(60px, 8vw, 100px);
+  }
+  .skill-row {
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    gap: clamp(20px, 4vw, 56px);
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    align-items: center;
+  }
+  .skill-row:last-child { border-bottom: 1px solid var(--line); }
+  .skill-row .domain {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+  .skill-row .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-row .chips .chip {
+    font-size: 13px;
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--bone-dim);
+    transition: 0.3s;
+  }
+  .skill-row .chips .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .skill-row .level {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--bone-soft);
+  }
+  @media (max-width: 760px) {
+    .skill-row { grid-template-columns: 1fr; gap: 12px; }
+  }
+
+  /* ───────────── PROJECTS ───────────── */
+  #projects { border-top: 1px solid var(--line); }
+  .proj-grid {
+    margin-top: clamp(60px, 8vw, 100px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 880px) { .proj-grid { grid-template-columns: 1fr; } }
+  .proj {
+    border: 1px solid var(--line);
+    padding: clamp(28px, 3.5vw, 44px);
+    background: var(--ink-2);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s, transform 0.5s cubic-bezier(.2,.7,.2,1);
+    transform-style: preserve-3d;
+    perspective: 800px;
+    min-height: 360px;
+    display: flex; flex-direction: column;
+  }
+  .proj:hover { border-color: color-mix(in oklch, var(--accent) 60%, var(--line)); }
+  .proj .pn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--bone-soft);
+  }
+  .proj h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(30px, 3.5vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 12px 0 0;
+    max-width: 16ch;
+  }
+  .proj h3 em { color: var(--accent); }
+  .proj p {
+    color: var(--bone-dim);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 16px 0 0;
+    max-width: 50ch;
+  }
+  .proj .tags {
+    margin-top: auto;
+    padding-top: 24px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .proj .tags .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .proj .visual {
+    position: absolute;
+    right: -20px; top: -20px;
+    width: 180px; height: 180px;
+    pointer-events: none;
+    opacity: 0.7;
+    transition: 0.6s;
+  }
+  .proj:hover .visual { transform: rotate(15deg) scale(1.1); opacity: 1; }
+  .proj .visual svg { width: 100%; height: 100%; }
+  .proj .visual circle, .proj .visual line { stroke: var(--accent); }
+
+  /* ───────────── EXPERIENCE ───────────── */
+  #experience { border-top: 1px solid var(--line); }
+  .exp-list { margin-top: clamp(60px, 8vw, 100px); }
+  .exp {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: clamp(20px, 4vw, 56px);
+    padding: clamp(28px, 4vw, 44px) 0;
+    border-top: 1px solid var(--line);
+    align-items: start;
+    position: relative;
+    overflow: hidden;
+  }
+  .exp:last-child { border-bottom: 1px solid var(--line); }
+  .exp::before {
+    content: ""; position: absolute; left: 0; top: 0; height: 1px; width: 0;
+    background: var(--accent);
+    transition: width 0.6s cubic-bezier(.2,.7,.2,1);
+  }
+  .exp:hover::before { width: 100%; }
+  .exp .yr {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--bone-soft);
+    padding-top: 8px;
+  }
+  .exp h4 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(24px, 2.6vw, 36px);
+    line-height: 1.1;
+    margin: 0;
+  }
+  .exp .where {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    margin-top: 8px;
+  }
+  .exp p {
+    color: var(--bone-dim);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 14px 0 0;
+    max-width: 55ch;
+  }
+  .exp .role {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 8px;
+    text-align: right;
+  }
+  @media (max-width: 760px) {
+    .exp { grid-template-columns: 1fr; gap: 12px; }
+    .exp .role { text-align: left; }
+  }
+
+  /* ───────────── CONTACT ───────────── */
+  #contact {
+    border-top: 1px solid var(--line);
+    text-align: left;
+    padding-top: clamp(80px, 12vw, 160px);
+  }
+  #contact .eyebrow { justify-content: flex-start; }
+  #contact .contact-headline {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(38px, 7vw, 100px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin: 28px 0 0;
+    color: var(--bone);
+  }
+  #contact .contact-headline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  #contact .contact-body {
+    margin: 32px 0 0;
+    max-width: 52ch;
+    font-size: clamp(15px, 1.4vw, 18px);
+    line-height: 1.65;
+    color: var(--bone-dim);
+    font-weight: 300;
+  }
+  .email-row {
+    margin-top: clamp(48px, 7vw, 80px);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .email-row .email-addr {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(22px, 3.5vw, 52px);
+    letter-spacing: -0.01em;
+    color: var(--bone);
+  }
+  .email-row .copy-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: 1px solid var(--bone-soft);
+    border-radius: 999px;
+    color: var(--bone-soft);
+    background: transparent;
+    cursor: pointer;
+    transition: 0.25s;
+  }
+  .email-row .copy-btn:hover { border-color: var(--bone); color: var(--bone); }
+  .email-row .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
+  .contact-links {
+    margin-top: 48px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .contact-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--bone-dim);
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: 0.25s;
+  }
+  .contact-links a:hover { border-color: var(--accent); color: var(--accent); }
+  .contact-links a .arr { font-size: 14px; }
+
+  footer {
+    padding: 40px var(--gut);
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-soft);
+    border-top: 1px solid var(--line);
+  }
+  footer .colophon { display: flex; gap: 24px; flex-wrap: wrap; }
+  @media (max-width: 600px) { footer { flex-direction: column; gap: 16px; align-items: flex-start; } }
+
+  /* hide on small */
+  @media (max-width: 600px) {
+    nav.top ul { display: none; }
+    .scroll-hint { display: none; }
+  }
+
+  /* ───────────── magnetic helper class ───────────── */
+  .magnetic { display: inline-flex; }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ───── boot curtain ───── -->
+<div id="boot" aria-hidden="true">
+  <div class="boot-grid"></div>
+  <div class="boot-stack">
+    <div class="boot-meta">Initializing &middot; Roshan G &middot; Portfolio v 2026</div>
+    <div class="boot-name"><span>R</span><span>O</span><span>S</span><span>H</span><span>A</span><span>N</span><span>.</span></div>
+    <div class="boot-bar"></div>
+  </div>
+</div>
+
+<!-- ───── cursor ───── -->
+<div id="cursor-ring"></div>
+<div id="cursor"></div>
+
+<!-- ───── nav ───── -->
+<nav class="top">
+  <a href="#hero" class="logo">
+    <span class="dot"></span>
+    Roshan&nbsp;G
+  </a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <span class="clock" id="clock">— —:— —</span>
+</nav>
+
+<!-- ───── side dots ───── -->
+<div class="dots" id="dots">
+  <a href="#hero" data-id="hero"><span class="lbl">Index</span><span class="pip"></span></a>
+  <a href="#about" data-id="about"><span class="lbl">About</span><span class="pip"></span></a>
+  <a href="#education" data-id="education"><span class="lbl">Education</span><span class="pip"></span></a>
+  <a href="#certs" data-id="certs"><span class="lbl">Certifications</span><span class="pip"></span></a>
+  <a href="#skills" data-id="skills"><span class="lbl">Skills</span><span class="pip"></span></a>
+  <a href="#projects" data-id="projects"><span class="lbl">Projects</span><span class="pip"></span></a>
+  <a href="#experience" data-id="experience"><span class="lbl">Experience</span><span class="pip"></span></a>
+  <a href="#contact" data-id="contact"><span class="lbl">Contact</span><span class="pip"></span></a>
+</div>
+
+<!-- ───── HERO ───── -->
+<section id="hero">
+  <div id="hero-bg-img" aria-hidden="true"></div>
+
+  <!-- Decorative medicine & vaccine background shapes -->
+  <div id="hero-deco" aria-hidden="true">
+    <!-- Pill / tablet with cross -->
+    <svg class="deco-pill" viewBox="0 0 340 160" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="10" y="10" width="320" height="140" rx="70" ry="70"/>
+      <line x1="170" y1="10" x2="170" y2="150"/>
+      <rect x="10" y="10" width="160" height="140" rx="70" ry="70" fill="currentColor" fill-opacity="0.15" stroke="none"/>
+      <line x1="80" y1="80" x2="110" y2="80" stroke-width="3.5"/>
+      <line x1="95" y1="65" x2="95" y2="95" stroke-width="3.5"/>
+    </svg>
+    <!-- Syringe / vaccine -->
+    <svg class="deco-syringe" viewBox="0 0 300 110" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="72" y="28" width="140" height="54" rx="10"/>
+      <line x1="212" y1="55" x2="285" y2="55"/>
+      <line x1="285" y1="38" x2="285" y2="72"/>
+      <rect x="36" y="36" width="36" height="38" rx="5"/>
+      <line x1="4" y1="55" x2="36" y2="55"/>
+      <line x1="110" y1="28" x2="110" y2="18" stroke-width="3"/>
+      <line x1="140" y1="28" x2="140" y2="18" stroke-width="3"/>
+      <line x1="170" y1="28" x2="170" y2="18" stroke-width="3"/>
+      <rect x="72" y="28" width="80" height="54" rx="10" fill="currentColor" fill-opacity="0.18" stroke="none"/>
+      <line x1="95" y1="55" x2="145" y2="55" stroke-width="4"/>
+      <line x1="120" y1="34" x2="120" y2="76" stroke-width="4"/>
+    </svg>
+    <!-- Capsule -->
+    <svg class="deco-capsule" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="4" stroke-linecap="round">
+      <rect x="8" y="8" width="184" height="64" rx="32" ry="32"/>
+      <line x1="100" y1="8" x2="100" y2="72"/>
+      <rect x="8" y="8" width="92" height="64" rx="32" ry="32" fill="currentColor" fill-opacity="0.2" stroke="none"/>
+    </svg>
+  </div>
+
+  <canvas id="mol"></canvas>
+  <div class="bio-grid"></div>
+  <div class="hero-stack">
+    <div class="hero-meta">
+      <span>Chennai · Tamil Nadu · India</span>
+      <span class="live">Open to Research &amp; Industry Roles</span>
+      <span>2025 ✦ B.Pharm Graduate</span>
+    </div>
+    <div class="hero-name-big">Roshan G</div>
+    <h1 id="hero-title" data-text="Pharmacist designing the next molecule.">
+      <span class="ital">Pharmacist</span><br/>
+      designing the next<br/>
+      <span class="accent">molecule.</span>
+    </h1>
+    <div class="hero-sub">
+      <p class="lede">
+        I'm <strong>Roshan G</strong> — a B.Pharm graduate specialising in
+        <strong>vaccine development, genomics &amp; molecular medicine</strong>.
+        Working at the interface of bioinformatics, pharmacology and translational science.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn primary magnetic"><span>See work</span><span class="arr">→</span></a>
+        <a href="#contact" class="btn magnetic"><span>Get in touch</span><span class="arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span class="line"></span> Scroll</div>
+</section>
+
+<!-- ───── ticker ───── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="ticker">
+    <em>Vaccine Development</em><span class="dot"></span><span>Pharmacology &amp; Toxicology</span><span class="dot"></span><em>Genomics</em><span class="dot"></span><span>Pharma Biotech</span><span class="dot"></span><em>Bioinformatics</em><span class="dot"></span><span>Molecular Medicine</span><span class="dot"></span>
+    <em>Vaccine Development</em><span class="dot"></span><span>Pharmacology &amp; Toxicology</span><span class="dot"></span><em>Genomics</em><span class="dot"></span><span>Pharma Biotech</span><span class="dot"></span><em>Bioinformatics</em><span class="dot"></span><span>Molecular Medicine</span><span class="dot"></span>
+  </div>
+</div>
+
+<!-- ───── ABOUT ───── -->
+<section id="about">
+  <div class="eyebrow reveal">01 / About</div>
+  <h2 class="h-section reveal d1">From molecule<br/>to <em>medicine.</em></h2>
+  <div class="grid">
+    <div class="reveal d1">
+      <p>
+        I build at the intersection of <strong>vaccine science, genomics</strong> and
+        <strong>molecular pharmacology</strong> — where sequence data becomes
+        therapeutic candidates and biology becomes code.
+      </p>
+      <p style="color: var(--bone-dim); font-size: 17px;">
+        Trained in B.Pharm at Mohamed Sathak A.J. College of Pharmacy,
+        I've pivoted my focus toward translational vaccine research,
+        genomic target identification and AI-assisted bioinformatics pipelines.
+        My fascination lives in the messy in-between — where toxicology
+        meets target validation and a genome annotation becomes a lead compound.
+      </p>
+      <p style="color: var(--bone-dim); font-size: 17px; margin-top: 1em;">
+        The thread across all of it is rigour applied where impact is decided:
+        a vaccine only matters if it's manufacturable, immunogenic and equitably
+        accessible. I work toward that end — from antigen design and carrier systems
+        through to biotech-scale formulation and safety modelling.
+      </p>
+    </div>
+    <div>
+      <!-- Image-2 style profile card -->
+      <div class="profile-card reveal d2">
+        <div class="profile-card-monogram">RG</div>
+        <div class="profile-card-rows">
+          <div class="profile-card-row">
+            <span class="pk">domain</span>
+            <span class="pv">Pharmacology &amp; Toxicology · Pharma Biotech</span>
+          </div>
+          <div class="profile-card-row">
+            <span class="pk">focus</span>
+            <span class="pv">Vaccine · Genomics · Bioinformatics</span>
+          </div>
+          <div class="profile-card-row">
+            <span class="pk">base</span>
+            <span class="pv">Chennai, IN</span>
+          </div>
+          <div class="profile-card-row">
+            <span class="pk">status</span>
+            <span class="pv">Open · 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- stats below card -->
+      <div class="stat-col" style="margin-top: 32px;">
+        <div class="stat reveal d3">
+          <div class="lbl">Years studying</div>
+          <div class="val" data-count="4">0</div>
+        </div>
+        <div class="stat reveal d3">
+          <div class="lbl">CGPA · B.Pharm</div>
+          <div class="val">8.2</div>
+        </div>
+        <div class="stat reveal d4">
+          <div class="lbl">Certifications</div>
+          <div class="val" data-count="5">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── EDUCATION ───── -->
+<section id="education">
+  <div class="eyebrow reveal">02 / Education</div>
+  <h2 class="h-section reveal d1">From classroom<br/>to <em>compound.</em></h2>
+  <div class="timeline">
+
+    <div class="tl-row reveal d1">
+      <div class="tl-when">2026</div>
+      <div class="tl-body">
+        <h3>Trainee Pharmacist</h3>
+        <div class="org">Retail Pharmacy · Chennai</div>
+        <p>
+          Hands-on patient counselling, OTC triage and prescription verification
+          under supervision. Inventory management, cold-chain handling for vaccines
+          and biologics, and drug interaction monitoring in a community setting.
+        </p>
+      </div>
+      <div class="tl-grade">
+        <span class="pct" style="font-size: clamp(18px,2vw,26px); font-family: var(--mono); font-style: normal;">Trainee</span>
+        <span class="sub">Retail Pharmacy</span>
+      </div>
+    </div>
+
+    <div class="tl-row reveal d2">
+      <div class="tl-when">2021 — 2025</div>
+      <div class="tl-body">
+        <h3>Bachelor of Pharmacy</h3>
+        <div class="org">Mohamed Sathak A.J. College of Pharmacy</div>
+        <p>
+          Core curriculum across pharmacology, medicinal chemistry, pharmaceutics
+          and formulation sciences — paired with growing interest in
+          computational and AI-driven discovery pipelines. Published research in WJPPS.
+        </p>
+      </div>
+      <div class="tl-grade">
+        <span class="pct">8.2</span>
+        <span class="sub">CGPA</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───── CERTIFICATIONS ───── -->
+<section id="certs">
+  <div class="eyebrow reveal">03 / Certifications</div>
+  <h2 class="h-section reveal d1">Specialized<br/><em>training.</em></h2>
+  <div class="cert-grid">
+    <div class="cert-card reveal d1">
+      <div class="top">
+        <span>NPTEL · IIT-Affiliated MOOC</span>
+        <span class="badge">● Verified</span>
+      </div>
+      <h3>AI for <em>Drug Discovery</em><br/>&amp; Development</h3>
+      <div class="meta">
+        <span>Issuer · NPTEL</span>
+        <span>Domain · Comp. Pharmacology</span>
+        <span>Format · Online · Proctored</span>
+        <span>Roshan G · Holder</span>
+      </div>
+    </div>
+
+    <div class="cert-card reveal d2">
+      <div class="top">
+        <span>Alison · Online Learning</span>
+        <span class="badge">● Certified</span>
+      </div>
+      <h3><em>ACD/ChemSketch</em><br/>Molecular Drawing</h3>
+      <div class="meta">
+        <span>Issuer · Alison</span>
+        <span>Domain · Cheminformatics</span>
+        <span>Format · Online · Self-paced</span>
+        <span>Roshan G · Holder</span>
+      </div>
+    </div>
+
+    <div class="cert-card reveal d3">
+      <div class="top">
+        <span>IBM SkillsBuild · Technology</span>
+        <span class="badge">● Certified</span>
+      </div>
+      <h3>Artificial Intelligence<br/><em>Fundamentals</em></h3>
+      <div class="meta">
+        <span>Issuer · IBM SkillsBuild</span>
+        <span>Domain · AI &amp; Machine Learning</span>
+        <span>Format · Online · Modular</span>
+        <span>Roshan G · Holder</span>
+      </div>
+    </div>
+
+    <div class="cert-card reveal d4">
+      <div class="top">
+        <span>IBM SkillsBuild · Professional</span>
+        <span class="badge">● Certified</span>
+      </div>
+      <h3>Customer Engagement<br/><em>Communication &amp; Personality</em></h3>
+      <div class="meta">
+        <span>Issuer · IBM SkillsBuild</span>
+        <span>Domain · Professional Skills</span>
+        <span>Format · Online</span>
+        <span>Roshan G · Holder</span>
+      </div>
+    </div>
+
+    <div class="cert-card reveal d5">
+      <div class="top">
+        <span>IBM SkillsBuild · Professional</span>
+        <span class="badge">● Certified</span>
+      </div>
+      <h3>Problem Solving<br/>&amp; <em>Process Controls</em></h3>
+      <div class="meta">
+        <span>Issuer · IBM SkillsBuild</span>
+        <span>Domain · Professional Skills</span>
+        <span>Format · Online</span>
+        <span>Roshan G · Holder</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── SKILLS ───── -->
+<section id="skills">
+  <div class="eyebrow reveal">04 / Skills</div>
+  <h2 class="h-section reveal d1">Toolbelt<br/>&amp; <em>vocabulary.</em></h2>
+  <div class="skill-rows">
+
+    <div class="skill-row reveal d1">
+      <div class="domain">Pharmaceutics</div>
+      <div class="chips">
+        <span class="chip">Pharmacology basics</span>
+        <span class="chip">Drug formulation</span>
+        <span class="chip">Laboratory techniques</span>
+        <span class="chip">Drug delivery</span>
+        <span class="chip">Pharmacokinetics</span>
+        <span class="chip">Pharmacodynamics</span>
+      </div>
+      <div class="level">core</div>
+    </div>
+
+    <div class="skill-row reveal d1">
+      <div class="domain">Comp. Chemistry</div>
+      <div class="chips">
+        <span class="chip">ACD/ChemSketch</span>
+        <span class="chip">Molecular docking</span>
+        <span class="chip">ADMET prediction</span>
+        <span class="chip">Virtual screening</span>
+        <span class="chip">Phytochemical analysis</span>
+      </div>
+      <div class="level">growing</div>
+    </div>
+
+    <div class="skill-row reveal d2">
+      <div class="domain">Lab &amp; Clinical</div>
+      <div class="chips">
+        <span class="chip">HPLC</span>
+        <span class="chip">UV-Vis spectroscopy</span>
+        <span class="chip">FTIR</span>
+        <span class="chip">Aseptic technique</span>
+        <span class="chip">In-vitro antioxidant assay</span>
+      </div>
+      <div class="level">trained</div>
+    </div>
+
+    <div class="skill-row reveal d3">
+      <div class="domain">Professional</div>
+      <div class="chips">
+        <span class="chip">Patient counselling</span>
+        <span class="chip">Inventory management</span>
+        <span class="chip">Cross-functional teamwork</span>
+      </div>
+      <div class="level">strong</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───── PROJECTS ───── -->
+<section id="projects">
+  <div class="eyebrow reveal">05 / Selected Work</div>
+  <h2 class="h-section reveal d1">Projects in<br/><em>progress.</em></h2>
+  <div class="proj-grid">
+
+    <article class="proj reveal d1" data-tilt>
+      <div class="visual"><svg viewBox="0 0 200 200">
+        <g fill="none" stroke-width="1" opacity="0.9">
+          <circle cx="100" cy="80"  r="22" stroke="currentColor"/>
+          <circle cx="60"  cy="140" r="14" stroke="currentColor"/>
+          <circle cx="140" cy="140" r="14" stroke="currentColor"/>
+          <line x1="100" y1="102" x2="60"  y2="126"/>
+          <line x1="100" y1="102" x2="140" y2="126"/>
+          <circle cx="100" cy="80" r="6" fill="currentColor"/>
+          <circle cx="60" cy="140" r="4" fill="currentColor"/>
+          <circle cx="140" cy="140" r="4" fill="currentColor"/>
+        </g>
+      </svg></div>
+      <div class="pn">P / 01</div>
+      <h3>Phytochemical analysis of <em>Jatropha glandulifera</em> roots.</h3>
+      <p>Conducted phytochemical screening and evaluated in-vitro antioxidant activity of Jatropha glandulifera roots. Contributed to a published manuscript in the World Journal of Pharmacy and Pharmaceutical Sciences.</p>
+      <div class="tags">
+        <span class="tag">Phytochemistry</span><span class="tag">Antioxidant Assay</span><span class="tag">Published · WJPPS/31764/2026</span>
+      </div>
+    </article>
+
+  </div>
+  <p class="reveal d3" style="margin-top: 32px; color: var(--bone-soft); font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;">
+    More writeups in preparation — repos &amp; reports landing soon.
+  </p>
+</section>
+
+<!-- ───── EXPERIENCE ───── -->
+<section id="experience">
+  <div class="eyebrow reveal">06 / Experience</div>
+  <h2 class="h-section reveal d1">Internships<br/>&amp; <em>practice.</em></h2>
+  <div class="exp-list">
+
+    <div class="exp reveal d1">
+      <div class="yr">2025</div>
+      <div>
+        <h4>Industrial Visit · Formulation Plant</h4>
+        <div class="where">Madras Pharma · Pharmaceutical Manufacturing Unit</div>
+        <p>Walkthrough of GMP-compliant tablet and oral-liquid lines —
+        granulation, blending, compression, coating, and QA / QC sampling
+        protocols observed end to end.</p>
+      </div>
+      <div class="role">Visit · Observer</div>
+    </div>
+
+    <div class="exp reveal d2">
+      <div class="yr">2024</div>
+      <div>
+        <h4>Hospital Pharmacy Internship</h4>
+        <div class="where">Promed Hospital · Chennai</div>
+        <p>Assisted in dispensing medications under supervision. Maintained patient
+        prescription records and documentation. Supported inventory management and
+        drug storage. Observed drug interactions and dosage planning.</p>
+      </div>
+      <div class="role">Pharmacy Intern</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───── CONTACT ───── -->
+<section id="contact">
+  <div class="eyebrow reveal" style="display: inline-flex;">07 / Contact</div>
+
+  <h2 class="contact-headline reveal d1">
+    Building the case for<br/>better medicine.<br/>
+    <em>Let's work together.</em>
+  </h2>
+
+  <p class="contact-body reveal d2">
+    Open to roles and collaborations in vaccine development,
+    genomics, pharmacology &amp; toxicology, pharma biotech,
+    bioinformatics, and molecular medicine research.
+    The fastest way to reach me is below.
+  </p>
+
+  <div class="email-row reveal d3">
+    <span class="email-addr">roshanguru2202@gmail.com</span>
+    <button class="copy-btn magnetic" id="copyEmailBtn" onclick="
+      navigator.clipboard.writeText('roshanguru2202@gmail.com');
+      this.textContent='Copied!';
+      this.classList.add('copied');
+      setTimeout(()=>{this.textContent='Copy';this.classList.remove('copied');},2000);
+    ">Copy</button>
+  </div>
+
+  <div class="contact-links reveal d4">
+    <a href="https://www.linkedin.com/in/roshan-gurumurthy-b24b32365" target="_blank" rel="noopener">LinkedIn <span class="arr">↗</span></a>
+    <a href="https://github.com/roshan2202" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
+    <a href="Roshan_G_CV.pdf" target="_blank" download="Roshan_G_CV.pdf">Download CV <span class="arr">↓</span></a>
+    <span style="font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:12px 20px;border:1px solid var(--line);border-radius:6px;color:var(--bone-soft);display:inline-flex;align-items:center;gap:8px;">
+      <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.8 0 2 1.8 2 4c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/></svg>
+      Chennai, India
+    </span>
+  </div>
+
+  <div class="reveal d5" style="margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-soft); display: flex; align-items: center; gap: 10px;">
+    <svg width="12" height="14" viewBox="0 0 12 14" fill="none" style="flex-shrink:0;opacity:0.5"><path d="M6 0C3.8 0 2 1.8 2 4c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/></svg>
+    Chennai, Tamil Nadu, India
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 Roshan G — All rights reserved.</div>
+  <div class="colophon">
+    <span>Built with HTML · CSS · vanilla JS</span>
+    <span>Set in Instrument Serif &amp; Geist</span>
+  </div>
+  <div style="width:100%; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-soft); display:flex; align-items:center; gap:8px;">
+    <svg width="10" height="12" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.8 0 2 1.8 2 4c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/></svg>
+    Chennai, Tamil Nadu, India
+  </div>
+</footer>
+
+<!-- ───────────────── scripts ───────────────── -->
+<script>
+(function () {
+  /* ─── boot curtain ─── */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const boot = document.getElementById('boot');
+      boot.classList.add('gone');
+      setTimeout(() => boot.remove(), 1600);
+      kickScrambles();
+      kickCounters();
+    }, 1800);
+  });
+
+  /* ─── clock ─── */
+  function tickClock() {
+    const el = document.getElementById('clock');
+    if (!el) return;
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2,'0');
+    const mm = String(d.getMinutes()).padStart(2,'0');
+    el.textContent = hh + ':' + mm + ' IST';
+  }
+  tickClock(); setInterval(tickClock, 30000);
+
+  /* ─── DNA / Genomics canvas ─── */
+  const canvas = document.getElementById('mol');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let mouse = { x: -1000, y: -1000 };
+  let t = 0;
+
+  // Color palette: pure black + white/silver/blue — no green
+  const C = {
+    strand1:  'rgba(200, 215, 255, ',  // cool white-blue strand
+    strand2:  'rgba(160, 190, 255, ',  // softer blue strand
+    rung:     'rgba(220, 230, 255, ',  // bright white-blue connector
+    nodeA:    'rgba(255, 255, 255, ',  // white — adenine
+    nodeT:    'rgba(180, 200, 255, ',  // pale blue — thymine
+    nodeG:    'rgba(200, 180, 255, ',  // pale violet — guanine
+    nodeC:    'rgba(220, 220, 220, ',  // silver — cytosine
+    particle: 'rgba(200, 210, 255, ',  // general particle
+    seq:      'rgba(180, 200, 255, ',  // sequence text
+  };
+
+  // DNA helices: array of {cx, speed, phase, amplitude, baseSpacing}
+  const helices = [];
+  const BASE_LETTERS = ['A','T','G','C'];
+  const BASE_COLORS  = [C.nodeA, C.nodeT, C.nodeG, C.nodeC];
+
+  // Floating sequence particles
+  const seqParticles = [];
+  const SEQ_COUNT = 30;
+
+  // Floating molecule nodes (background network)
+  const molNodes = [];
+  const MOL_COUNT = 40;
+
+  function resize() {
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    initScene();
+  }
+
+  function initScene() {
+    helices.length = 0;
+    seqParticles.length = 0;
+    molNodes.length = 0;
+
+    // 3 DNA helices spread across canvas
+    const positions = [0.18, 0.52, 0.84];
+    positions.forEach((frac, i) => {
+      helices.push({
+        cx: W * frac,
+        speed: 0.003 + i * 0.0008,
+        phase: i * Math.PI * 0.7,
+        amplitude: W < 600 ? 28 : 44,
+        baseSpacing: 22,
+        yOffset: Math.random() * Math.PI * 2,
+      });
+    });
+
+    // Floating base-letter particles
+    for (let i = 0; i < SEQ_COUNT; i++) {
+      seqParticles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vy: -(0.12 + Math.random() * 0.2),
+        vx: (Math.random() - 0.5) * 0.08,
+        letter: BASE_LETTERS[Math.floor(Math.random() * 4)],
+        alpha: 0.1 + Math.random() * 0.25,
+        size: 10 + Math.random() * 8,
+        fade: Math.random(),
+      });
+    }
+
+    // Background molecule nodes
+    for (let i = 0; i < MOL_COUNT; i++) {
+      molNodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        r: Math.random() < 0.2 ? 2.5 : 1.2,
+        colIdx: Math.floor(Math.random() * 4),
+      });
+    }
+  }
+
+  function drawHelix(h, time) {
+    const { cx, speed, phase, amplitude, baseSpacing } = h;
+    const rows = Math.ceil(H / baseSpacing) + 4;
+    const offset = (time * speed * 300) % (baseSpacing);
+
+    for (let i = -2; i < rows; i++) {
+      const y = i * baseSpacing - offset;
+      const ang = (i * baseSpacing * 0.055) + phase + time * speed * 6;
+
+      const x1 = cx + Math.sin(ang) * amplitude;
+      const x2 = cx + Math.sin(ang + Math.PI) * amplitude;
+
+      const z1 = Math.cos(ang);
+      const z2 = Math.cos(ang + Math.PI);
+      // Stronger depth: front nodes bright, back nodes very dim
+      const a1 = 0.08 + 0.72 * ((z1 + 1) * 0.5);
+      const a2 = 0.08 + 0.72 * ((z2 + 1) * 0.5);
+      // Node radius scales with depth (3D perspective)
+      const r1 = 1.4 + 2.2 * ((z1 + 1) * 0.5);
+      const r2 = 1.4 + 2.2 * ((z2 + 1) * 0.5);
+
+      // Cross-rung (base pair) — only when strands are near crossing
+      const crossAng = Math.abs(Math.sin(ang));
+      if (crossAng < 0.32) {
+        const rungAlpha = (0.32 - crossAng) / 0.32 * 0.35;
+        // Shadow rung (offset below for 3D depth illusion)
+        ctx.strokeStyle = 'rgba(0,0,0,' + rungAlpha * 0.5 + ')';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(x1 + 1, y + 1.5);
+        ctx.lineTo(x2 + 1, y + 1.5);
+        ctx.stroke();
+        // Main rung
+        ctx.strokeStyle = C.rung + rungAlpha + ')';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(x1, y);
+        ctx.lineTo(x2, y);
+        ctx.stroke();
+      }
+
+      const bIdx = (Math.abs(i) + Math.floor(phase * 2)) % 4;
+      const col1 = BASE_COLORS[bIdx];
+      const col2 = BASE_COLORS[(bIdx + 2) % 4];
+
+      // === Strand 1 node — 3D sphere effect ===
+      // Drop shadow
+      ctx.beginPath();
+      ctx.arc(x1 + r1*0.4, y + r1*0.5, r1 * 1.1, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,0,0,' + a1 * 0.5 + ')';
+      ctx.fill();
+      // Outer glow halo
+      const grd1 = ctx.createRadialGradient(x1, y, 0, x1, y, r1 * 4);
+      grd1.addColorStop(0, col1 + (a1 * 0.6) + ')');
+      grd1.addColorStop(1, col1 + '0)');
+      ctx.fillStyle = grd1;
+      ctx.beginPath();
+      ctx.arc(x1, y, r1 * 4, 0, Math.PI*2);
+      ctx.fill();
+      // Main sphere body (dark core + lit edge)
+      const sph1 = ctx.createRadialGradient(x1 - r1*0.35, y - r1*0.35, 0, x1, y, r1);
+      sph1.addColorStop(0, col1 + Math.min(1, a1 + 0.15) + ')');
+      sph1.addColorStop(0.55, col1 + a1 + ')');
+      sph1.addColorStop(1, 'rgba(0,0,0,' + a1 * 0.8 + ')');
+      ctx.fillStyle = sph1;
+      ctx.beginPath();
+      ctx.arc(x1, y, r1, 0, Math.PI*2);
+      ctx.fill();
+      // Specular highlight
+      const hl1 = ctx.createRadialGradient(x1 - r1*0.4, y - r1*0.4, 0, x1 - r1*0.4, y - r1*0.4, r1*0.55);
+      hl1.addColorStop(0, 'rgba(255,255,255,' + a1 * 0.9 + ')');
+      hl1.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hl1;
+      ctx.beginPath();
+      ctx.arc(x1, y, r1, 0, Math.PI*2);
+      ctx.fill();
+
+      // === Strand 2 node — 3D sphere effect ===
+      ctx.beginPath();
+      ctx.arc(x2 + r2*0.4, y + r2*0.5, r2 * 1.1, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,0,0,' + a2 * 0.5 + ')';
+      ctx.fill();
+      const grd2 = ctx.createRadialGradient(x2, y, 0, x2, y, r2 * 4);
+      grd2.addColorStop(0, col2 + (a2 * 0.6) + ')');
+      grd2.addColorStop(1, col2 + '0)');
+      ctx.fillStyle = grd2;
+      ctx.beginPath();
+      ctx.arc(x2, y, r2 * 4, 0, Math.PI*2);
+      ctx.fill();
+      const sph2 = ctx.createRadialGradient(x2 - r2*0.35, y - r2*0.35, 0, x2, y, r2);
+      sph2.addColorStop(0, col2 + Math.min(1, a2 + 0.15) + ')');
+      sph2.addColorStop(0.55, col2 + a2 + ')');
+      sph2.addColorStop(1, 'rgba(0,0,0,' + a2 * 0.8 + ')');
+      ctx.fillStyle = sph2;
+      ctx.beginPath();
+      ctx.arc(x2, y, r2, 0, Math.PI*2);
+      ctx.fill();
+      const hl2 = ctx.createRadialGradient(x2 - r2*0.4, y - r2*0.4, 0, x2 - r2*0.4, y - r2*0.4, r2*0.55);
+      hl2.addColorStop(0, 'rgba(255,255,255,' + a2 * 0.9 + ')');
+      hl2.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hl2;
+      ctx.beginPath();
+      ctx.arc(x2, y, r2, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // Backbone ribbon (tube-like with shadow + highlight)
+    for (let strand = 0; strand < 2; strand++) {
+      // Shadow ribbon
+      ctx.beginPath();
+      for (let i = -2; i < rows; i++) {
+        const y = i * baseSpacing - offset;
+        const ang = (i * baseSpacing * 0.055) + phase + time * speed * 6;
+        const x = cx + Math.sin(ang + strand * Math.PI) * amplitude;
+        if (i === -2) ctx.moveTo(x + 1.5, y + 2);
+        else ctx.lineTo(x + 1.5, y + 2);
+      }
+      ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      // Main ribbon
+      ctx.beginPath();
+      for (let i = -2; i < rows; i++) {
+        const y = i * baseSpacing - offset;
+        const ang = (i * baseSpacing * 0.055) + phase + time * speed * 6;
+        const x = cx + Math.sin(ang + strand * Math.PI) * amplitude;
+        const z = Math.cos(ang + strand * Math.PI);
+        if (i === -2) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = strand === 0 ? C.strand1 + '0.18)' : C.strand2 + '0.14)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  function drawSeqParticles() {
+    ctx.font = '500 12px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    for (const p of seqParticles) {
+      // mouse glow
+      const mdx = p.x - mouse.x, mdy = p.y - mouse.y;
+      const md = Math.sqrt(mdx*mdx + mdy*mdy);
+      const boost = md < 100 ? (100 - md) / 100 * 0.4 : 0;
+
+      const bIdx = BASE_LETTERS.indexOf(p.letter);
+      const col = BASE_COLORS[bIdx < 0 ? 0 : bIdx];
+      ctx.fillStyle = col + Math.min(1, p.alpha + boost) + ')';
+      ctx.font = `500 ${p.size}px "JetBrains Mono", monospace`;
+      ctx.fillText(p.letter, p.x, p.y);
+
+      p.y += p.vy;
+      p.x += p.vx;
+      p.fade += 0.003;
+      p.alpha = 0.08 + Math.sin(p.fade) * 0.12;
+
+      if (p.y < -20) {
+        p.y = H + 10;
+        p.x = Math.random() * W;
+        p.letter = BASE_LETTERS[Math.floor(Math.random() * 4)];
+      }
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+    }
+  }
+
+  function drawMolNodes() {
+    for (let i = 0; i < molNodes.length; i++) {
+      const n = molNodes[i];
+
+      // mouse repel
+      const mdx = n.x - mouse.x, mdy = n.y - mouse.y;
+      const md = Math.sqrt(mdx*mdx + mdy*mdy);
+      if (md < 100 && md > 0) {
+        const f = (100 - md) / 100 * 0.4;
+        n.vx += (mdx / md) * f * 0.04;
+        n.vy += (mdy / md) * f * 0.04;
+      }
+      n.x += n.vx; n.y += n.vy;
+      n.vx *= 0.988; n.vy *= 0.988;
+      n.vx += (Math.random() - 0.5) * 0.006;
+      n.vy += (Math.random() - 0.5) * 0.006;
+      if (n.x < 0) n.x = W; if (n.x > W) n.x = 0;
+      if (n.y < 0) n.y = H; if (n.y > H) n.y = 0;
+
+      const col = BASE_COLORS[n.colIdx];
+
+      // links
+      for (let j = i + 1; j < molNodes.length; j++) {
+        const b = molNodes[j];
+        const dx = n.x - b.x, dy = n.y - b.y;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < 110*110) {
+          const al = (1 - Math.sqrt(d2)/110) * 0.07;
+          ctx.strokeStyle = C.particle + al + ')';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+      ctx.fillStyle = col + (n.r > 2 ? '0.7' : '0.35') + ')';
+      ctx.fill();
+    }
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, W, H);
+    const sec = time * 0.001;
+
+    drawMolNodes();
+
+    for (const h of helices) {
+      drawHelix(h, sec);
+    }
+
+    drawSeqParticles();
+
+    t = sec;
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (e) => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+
+  /* ─── custom cursor ─── */
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let cx = -100, cy = -100, rx = -100, ry = -100;
+  let mx = -100, my = -100;
+  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function curLoop() {
+    cx += (mx - cx) * 0.55;
+    cy += (my - cy) * 0.55;
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    cur.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(curLoop);
+  }
+  curLoop();
+
+  // hover detection
+  document.querySelectorAll('a, button, .magnetic, .proj, .cert-card, .chip, .ck').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-link'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-link'));
+  });
+
+  /* ─── magnetic buttons ─── */
+  document.querySelectorAll('.magnetic').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      el.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+
+  /* ─── 3D tilt cards ─── */
+  document.querySelectorAll('[data-tilt]').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateZ(0)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+
+  /* ─── reveal on scroll ─── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ─── scroll dots ─── */
+  const dots = document.querySelectorAll('#dots a');
+  const sections = ['hero','about','education','certs','skills','projects','experience','contact']
+    .map(id => document.getElementById(id)).filter(Boolean);
+  function syncDots() {
+    const y = window.scrollY + window.innerHeight * 0.4;
+    let active = sections[0]?.id;
+    sections.forEach(s => { if (s.offsetTop <= y) active = s.id; });
+    dots.forEach(d => d.classList.toggle('active', d.dataset.id === active));
+  }
+  window.addEventListener('scroll', syncDots, { passive: true });
+  syncDots();
+
+  /* ─── number counters ─── */
+  function kickCounters() {
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const target = +el.dataset.count;
+      const dur = 1400;
+      const t0 = performance.now();
+      const unitNode = el.querySelector('.unit');
+      function step(t) {
+        const p = Math.min(1, (t - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const v = Math.round(target * eased);
+        if (unitNode) {
+          el.firstChild.nodeValue = v;
+        } else {
+          el.textContent = v;
+        }
+        if (p < 1) requestAnimationFrame(step);
+        else if (unitNode) { /* keep unit */ }
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* ─── text scramble (titles) ─── */
+  const SCR_CHARS = '!<>-_\\/[]{}—=+*^?#________';
+  function scramble(el, finalText, dur = 900) {
+    let frame = 0;
+    const queue = [];
+    const oldText = el.textContent;
+    const len = Math.max(oldText.length, finalText.length);
+    for (let i = 0; i < len; i++) {
+      const from = oldText[i] || '';
+      const to = finalText[i] || '';
+      const start = Math.floor(Math.random() * 20);
+      const end = start + Math.floor(Math.random() * 30);
+      queue.push({ from, to, start, end, char: '' });
+    }
+    const t0 = performance.now();
+    function step(t) {
+      const f = Math.floor((t - t0) / 16);
+      let out = '';
+      let done = 0;
+      for (let i = 0; i < queue.length; i++) {
+        const q = queue[i];
+        if (f >= q.end) { out += q.to; done++; }
+        else if (f >= q.start) {
+          if (!q.char || Math.random() < 0.28) {
+            q.char = SCR_CHARS[Math.floor(Math.random() * SCR_CHARS.length)];
+          }
+          out += `<span style="color:var(--bone-soft)">${q.char}</span>`;
+        } else {
+          out += q.from;
+        }
+      }
+      el.innerHTML = out;
+      if (done < queue.length) requestAnimationFrame(step);
+      else el.textContent = finalText;
+    }
+    requestAnimationFrame(step);
+  }
+
+  function kickScrambles() {
+    // section h2 scramble on first reveal
+    document.querySelectorAll('.h-section').forEach(h => {
+      const orig = h.innerHTML;
+      h.dataset.html = orig;
+      const text = h.textContent;
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            // do an html-preserving scramble of the visible text only
+            scrambleHtml(h, text, 800);
+            observer.unobserve(h);
+          }
+        });
+      }, { threshold: 0.4 });
+      observer.observe(h);
+    });
+  }
+
+  // Simpler: scramble character-only inside element while preserving final HTML
+  function scrambleHtml(el, finalText, dur = 800) {
+    const finalHTML = el.innerHTML;
+    const t0 = performance.now();
+    function step(t) {
+      const p = Math.min(1, (t - t0) / dur);
+      const reveal = Math.floor(finalText.length * p);
+      let out = '';
+      for (let i = 0; i < finalText.length; i++) {
+        if (i < reveal) out += finalText[i];
+        else if (finalText[i] === ' ' || finalText[i] === '\n') out += finalText[i];
+        else out += SCR_CHARS[Math.floor(Math.random() * SCR_CHARS.length)];
+      }
+      // place into a temporary text-only render
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(step);
+      else el.innerHTML = finalHTML;
+    }
+    requestAnimationFrame(step);
+  }
+
+})();
+</script>
+</body>
+</html>
